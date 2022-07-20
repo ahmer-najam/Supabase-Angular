@@ -8,15 +8,15 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  todos: Todo[];
+  todos: Todo[] = [];
   todo: Todo;
   actionLabel: string;
 
-  constructor(private api: ApiService) { }
+  constructor(private api: ApiService) {}
 
   async ngOnInit(): Promise<void> {
     this.clear();
-    let { todos, error } = await this.api.getTodos()
+    let { todos, error } = await this.api.getTodos();
     if (!error) {
       this.todos = todos ?? [];
     }
@@ -28,13 +28,12 @@ export class AppComponent implements OnInit {
       this.update();
       return;
     }
-    let { todo, error } = await this.api.addTodo(this.todo)
+    let { todo, error } = await this.api.addTodo(this.todo);
     if (error) {
-      console.log(`Error in add TODO ${error.message}`)
-    }
-    else {
-      console.log(todo)
-      this.todos = [todo, ...this.todos]
+      console.log(`Error in add TODO ${error.message}`);
+    } else {
+      console.log(todo);
+      this.todos = [todo, ...this.todos];
     }
     this.clear();
   }
@@ -45,7 +44,7 @@ export class AppComponent implements OnInit {
   }
 
   async update() {
-    let { error } = await this.api.update(this.todo)
+    let { error } = await this.api.update(this.todo);
     if (!error) {
       let foundIndex = this.todos.findIndex((t) => t.id == this.todo.id);
       this.todos[foundIndex] = this.todo;
@@ -60,8 +59,8 @@ export class AppComponent implements OnInit {
   }
 
   async delete(todo: Todo) {
-    await this.api.deleteTodo(todo.id)
-    this.todos = this.arrayRemove(this.todos, todo.id)
+    await this.api.deleteTodo(todo.id);
+    this.todos = this.arrayRemove(this.todos, todo.id);
   }
 
   arrayRemove(arr: Todo[], id: string) {
